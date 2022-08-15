@@ -1,0 +1,34 @@
+Source: blur-effect
+Section: graphics
+Priority: optional
+Maintainer: Deepin Developer <deepin-dev@deepin.org>
+Uploaders: Deepin Packages Builder <packages@deepin.org>
+ Boyuan Yang <byang@debian.org>,
+ Arun Kumar Pariyar <openarungeek@gmail.com>,
+ Clay Stan <claystan97@gmail.com>,
+Build-Depends:
+ cmake,
+ debhelper-compat (= 13),
+ libdrm-dev,
+ libegl1-mesa-dev,
+ libgbm-dev,
+ libgdk-pixbuf-2.0-dev,
+ libgles-dev,
+ libglew-dev,
+ libglm-dev,
+Standards-Version: 4.6.0
+Rules-Requires-Root: no
+Homepage: https://github.com/sonald/blur-effect
+#Vcs-Browser
+#Vcs-Git
+
+Package: blur-effect
+Architecture: any
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends},
+Description: Offscreen Image Blurring utility
+ Blur-effect is an offscreen image blurring utility, based on efficient
+ Gaussian blur with linear sampling.
+ .
+ This package is part of DDE (Deepin Desktop Environment).
