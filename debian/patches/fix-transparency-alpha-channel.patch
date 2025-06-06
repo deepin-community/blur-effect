@@ -1,0 +1,47 @@
+diff --git a/src/blur_image.cc b/src/blur_image.cc
+index 789abfe..f5bb79d 100644
+--- a/src/blur_image.cc
++++ b/src/blur_image.cc
+@@ -662,6 +662,11 @@ static void render()
+     glBindBuffer(GL_ARRAY_BUFFER, ctx.vbo);
+ 
+     glDisable(GL_DEPTH_TEST);
++    
++    // Clear color and enable blending for proper alpha handling
++    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
++    glEnable(GL_BLEND);
++    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+ 
+     glViewport(0, 0, ctx.tex_width, ctx.tex_height);
+     if (adjustHSL) {
+@@ -672,11 +677,13 @@ static void render()
+         GLuint tex1 = i == 0 ? (adjustHSL?ctx.lgtTex:ctx.tex) : ctx.fbTex[1];
+ 
+         glBindFramebuffer(GL_FRAMEBUFFER, ctx.fb[0]);
++        glClear(GL_COLOR_BUFFER_BIT);
+         glBindTexture(GL_TEXTURE_2D, tex1);
+         glUseProgram(ctx.program);
+         glDrawArrays(GL_TRIANGLES, 0, 6);
+ 
+         glBindFramebuffer(GL_FRAMEBUFFER, ctx.fb[1]);
++        glClear(GL_COLOR_BUFFER_BIT);
+         glBindTexture(GL_TEXTURE_2D, ctx.fbTex[0]);
+         glUseProgram(ctx.programH);
+         glDrawArrays(GL_TRIANGLES, 0, 6);
+@@ -691,6 +698,7 @@ static void render()
+     
+     glViewport(0, 0, ctx.width, ctx.height);
+     glBindFramebuffer(GL_FRAMEBUFFER, 0);
++    glClear(GL_COLOR_BUFFER_BIT);
+     if (ctx.brightnessAdjusted)
+         glBindTexture(GL_TEXTURE_2D, ctx.brtTex);
+     else
+@@ -810,7 +818,7 @@ static void setup_context()
+     printf("backend name: %s\n", gbm_device_get_backend_name(ctx.gbm));
+ 
+     ctx.gbm_surface = gbm_surface_create(ctx.gbm, ctx.width,
+-            ctx.height, GBM_FORMAT_XRGB8888,
++            ctx.height, GBM_FORMAT_ARGB8888,
+             GBM_BO_USE_SCANOUT | GBM_BO_USE_RENDERING);
+     if (!ctx.gbm_surface) {
+         printf("cannot create gbm surface (%d): %m", errno);
